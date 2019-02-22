@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./assets/semantic/semantic.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <script src="./assets/jquery.min.js"></script>
+  <link rel="stylesheet" href="./assets/bootstrap.css">
+  <script src="./assets/bootstrap.min.js"></script>
+  <script src="./assets/semantic/semantic.js"></script>
+  <script src="./assets/template-web.js"></script>
+<script src="./js/index.js"></script>
+</head>
+<body>
+  <h1>图书管理系统</h1>
+  <button class="ui blue button" id="add"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加图书</font></font></button>
+  <a href="/" class="ui pink button" id="reload"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首页</font></font></a>
+  <button class="ui pink button" id="search"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">搜索图书</font></font></button>
+  <div class="ui input">
+    <input type="text" placeholder="请输入搜索关键字" id="searchData">
+  </div>
+  <button class="ui pink button" id="sortBigToSmall"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">价格降序</font></font></button>
+  <button class="ui pink button" id="sortSmallToBig"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">价格升序</font></font></button>
+  <div class="ui modal">
+    <div class="header" id="header">
+       
+    </div>
+    <div class="tiny content" >
+      <form class="ui form" id="form">
+        <div class="field">
+          <label>书名</label>
+          <input type="text" name="bookName" placeholder="书名" id="bookName">
+        </div>
+        <div class="field">
+            <label>价格</label>
+            <input type="text" name="bookPrice" placeholder="价格" id="bookPrice">
+          </div>
+          <div class="field">
+              <label>作者</label>
+              <input type="text" name="bookAuthor" placeholder="作者" id="bookAuthor">
+            </div>
+        <div class="field">
+          <label>性别</label>
+          <select id="bookGender" name="bookGender">
+            <option value="男">男</option>
+            <option value="女">女</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui black deny button">
+        取消
+      </div>
+      <div class="ui positive right   button" id="confirm">
+        确定
+      </div>
+    </div>
+  </div>
+  <table class="ui celled yellow table">
+    <thead>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>状态</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>图书编号</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>图书名称</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>价格</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>作者</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>作者性别</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>添加时间</font></font></th>
+      <th><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"></font>操作</font></font></th>
+    
+  </thead>
+    <tbody id="tbody">
+      
+    </tbody>
+    
+  </table>
+  <nav aria-label="Page navigation">
+    <ul class="pagination pull-right " id="pageData">
+      <!-- <li >
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li ><a href="#" class="skyblue">1</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">1</a></li>
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li> -->
+    </ul>
+  </nav>
+</body>
+<script type="text/template" id="initTemp">
+  {{each}}
+  <tr>
+    <td>
+      <div class="ui ribbon {{(+$value.isDel==0) ? 'green':'red'}} label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{(+$value.isDel==0)?'正常':'已删除'}}</font></font></div>
+    </td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.id}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookName}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookPrice}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookAuthor}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookGender}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.ctime}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+      <button get-id="{{$value.id}}" id="update" class="ui blue button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">修改</font></font></button>
+      <button get-id="{{$value.id}}" id="stateDelete" class="ui orange button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态删除</font></font></button>
+      <button get-id="{{$value.id}}" id="stateRecover" class="ui green button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态恢复</font></font></button>
+      <button get-id="{{$value.id}}" id="thoroughDelete" class="ui red button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">彻底删除</font></font></button>
+    </font></font></td>
+  </tr>
+  {{/each}}
+</script>
+<script type="text/template" id="searchTemp">
+  {{each}}
+  <tr>
+    <td>
+      <div class="ui ribbon {{(+$value.isDel==0) ? 'green':'red'}} label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{(+$value.isDel==0)?'正常':'已删除'}}</font></font></div>
+    </td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.id}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookName}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookPrice}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookAuthor}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookGender}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.ctime}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+      <button id="update" class="ui blue button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">修改</font></font></button>
+      <button id="stateDelete" class="ui orange button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态删除</font></font></button>
+      <button id="stateRecover" class="ui green button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态恢复</font></font></button>
+      <button id="thoroughDelete" class="ui red button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">彻底删除</font></font></button>
+    </font></font></td>
+  </tr>
+  {{/each}}
+</script>
+<script type="text/template" id="sortBigToSmall1">
+  {{each}}
+  <tr>
+    <td>
+      <div class="ui ribbon {{(+$value.isDel==0) ? 'green':'red'}} label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{(+$value.isDel==0)?'正常':'已删除'}}</font></font></div>
+    </td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.id}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookName}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookPrice}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookAuthor}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookGender}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.ctime}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+      <button get-id="{{$value.id}}" id="update" class="ui blue button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">修改</font></font></button>
+      <button get-id="{{$value.id}}" id="stateDelete" class="ui orange button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态删除</font></font></button>
+      <button get-id="{{$value.id}}" id="stateRecover" class="ui green button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态恢复</font></font></button>
+      <button get-id="{{$value.id}}" id="thoroughDelete" class="ui red button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">彻底删除</font></font></button>
+    </font></font></td>
+  </tr>
+  {{/each}}
+</script>
+<script type="text/template" id="sortSmallToBig1">
+  {{each}}
+  <tr>
+    <td>
+      <div class="ui ribbon {{(+$value.isDel==0) ? 'green':'red'}} label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{(+$value.isDel==0)?'正常':'已删除'}}</font></font></div>
+    </td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.id}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookName}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookPrice}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookAuthor}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookGender}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.ctime}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+      <button get-id="{{$value.id}}" id="update" class="ui blue button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">修改</font></font></button>
+      <button get-id="{{$value.id}}" id="stateDelete" class="ui orange button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态删除</font></font></button>
+      <button get-id="{{$value.id}}" id="stateRecover" class="ui green button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态恢复</font></font></button>
+      <button get-id="{{$value.id}}" id="thoroughDelete" class="ui red button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">彻底删除</font></font></button>
+    </font></font></td>
+  </tr>
+  {{/each}}
+</script>
+<script type="text/template" id="pageTemp">
+   <!-- style="background-color:skyblue"   class="disabled"   备用 -->
+   <li get-id={{nowPage-1}} class="{{nowPage==1?'disabled':''}}">
+    <a  href="#" aria-label="Previous" class="{{nowPage-1<=0?'btn disabled':''}}">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  <!-- 默认给第一页的数据添加背景高亮的效果 -->
+  <li style="{{nowPage-2<=0?'display:none':''}}" get-id={{nowPage-2}}><a  href="#" >{{nowPage-2}}</a></li>
+  <li style="{{nowPage-1<=0?'display:none':''}}" get-id={{nowPage-1}}><a  href="#" >{{nowPage-1}}</a></li>
+  <li get-id={{nowPage}} ><a  href="#" style="background-color:skyblue;color:white">{{nowPage}}</a></li>
+  <li style="{{nowPage+1>pageNumber?'display:none':''}}" get-id={{nowPage+1}}><a  href="#" >{{nowPage+1}}</a></li>
+  <li style="{{nowPage+2>pageNumber?'display:none':''}}" get-id={{nowPage+2}}><a  href="#" >{{nowPage+2}}</a></li>
+  <li get-id={{nowPage+1}}  style="{{nowPage+1>pageNumber?'display:none':''}}">
+    <a  href="#" aria-label="Next"  class="{{nowPage+1>pageNumber?'btn disabled':''}}">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+ 
+</script>
+<script type="text/template" id="pageTemp1">
+   <!-- style="background-color:skyblue"   class="disabled"   备用 -->
+   <li get-id={{nowPage-1}} class="{{nowPage==1?'disabled':''}}">
+    <a  href="#" aria-label="Previous" class="{{nowPage-1<=0?'btn disabled':''}}">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>
+  <!-- 默认给第一页的数据添加背景高亮的效果 -->
+  <li style="{{nowPage-2<=0?'display:none':''}}" get-id={{nowPage-2}}><a  href="#" >{{nowPage-2}}</a></li>
+  <li style="{{nowPage-1<=0?'display:none':''}}" get-id={{nowPage-1}}><a  href="#" >{{nowPage-1}}</a></li>
+  <li get-id={{nowPage}} ><a  href="#" style="background-color:skyblue;color:white">{{nowPage}}</a></li>
+  <li style="{{nowPage+1>pageNumber?'display:none':''}}" get-id={{nowPage+1}}><a  href="#" >{{nowPage+1}}</a></li>
+  <li style="{{nowPage+2>pageNumber?'display:none':''}}" get-id={{nowPage+2}}><a  href="#" >{{nowPage+2}}</a></li>
+  <li get-id={{nowPage+1}}  >
+    <a  href="#" aria-label="Next"  class="{{nowPage+1>pageNumber?'btn disabled':''}}">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>
+ 
+</script>
+<script type="text/template" id="pageTemp2">
+  {{each}}
+  <tr>
+    <td>
+      <div class="ui ribbon {{(+$value.isDel==0) ? 'green':'red'}} label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{(+$value.isDel==0)?'正常':'已删除'}}</font></font></div>
+    </td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.id}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookName}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookPrice}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookAuthor}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.bookGender}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{$value.ctime}}</font></font></td>
+    <td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+      <button get-id="{{$value.id}}" id="update" class="ui blue button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">修改</font></font></button>
+      <button get-id="{{$value.id}}" id="stateDelete" class="ui orange button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态删除</font></font></button>
+      <button get-id="{{$value.id}}" id="stateRecover" class="ui green button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">状态恢复</font></font></button>
+      <button get-id="{{$value.id}}" id="thoroughDelete" class="ui red button"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">彻底删除</font></font></button>
+    </font></font></td>
+  </tr>
+  {{/each}}
+</script>
+</html>

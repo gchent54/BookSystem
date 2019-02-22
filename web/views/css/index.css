@@ -1,0 +1,13 @@
+h1{ 
+  color: rgb(23, 126, 243);
+  text-align: center;
+  padding: 20px 0;
+}
+body {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.skyblue {
+  background-color:skyblue!important;
+  color: white!important;
+}
